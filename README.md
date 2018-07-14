@@ -49,20 +49,27 @@ CNLP是一個基於Python以及深度學習來完成文本分類以及情緒預�
  [Download CNNew10 & Hotel Review](https://my.pcloud.com/publink/show?code=XZ4loB7Z4XtW9zxRlS7LgWWVEuQmc8KrA5DX)
 
  # Usage:
+ 1). To perform a calculation, just create an instance of corresponding NLP object. Then follow the procedure below to complete your calculation (as shown below).   
+ 2). The order of the following command are not changable. However, you can perform each command separately, e.g. if you already performed freq.load_data() in your previous execution, the next time you can simple run freq.run_stat() without doing freq.load_data() again since the method load_data will save a pickle file in work_dir/output. The next time you run a subsequent command, the CNLP will automatically search for the Pickle file in this folder. However, you the data is already in memory, CNLP will not search for the Pickle file again (so it will be quicker especially for large data). Similar idea applies to all CNLP objects.    
+ 3).  Also note that, by defult, you don't have to return anything of variable of each method. You will need returns unless you want to further process the data using your own codes.    
+ 4).  The meaning of each variables can be found in the "doc" folder
+
  * High-Frequency:
  <p align="center">
   <img src="./img/stat_usage.png">
-</p>
+ </p>
+
  * build deep learning model:
  <p align="center">
   <img src="./img/model_usage.png">
-</p>
+ </p>
+ 
  * predict unlabel data:
  <p align="center">
   <img src="./img/pred_usage.png">
-</p>
+ </p>
 
- Note: By defult, you don't have to return anything of each method. You will need returns unless you want to further process the returned data using your own codes.
+
 
 
 
