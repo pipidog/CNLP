@@ -12,16 +12,20 @@ class nlp_stat(nlp_base):
                 is_remove_special = True, remove_list = ()):
         '''
         << summary >>
-        load scratch data, data must be three columns: [acct_num, label, address]
+        load and clean scratch data, data must be in csv format
         << inputs >>
-        data_file: a list contains all data files, e.g. ['data1.csv', 'data2.csv']
+        read_csv: a list contains all data files, e.g. ['data1.csv', 'data2.csv']
         sep: symbol used in data file to seperate columns
-        is_shuffle: whether to shuffle the data
+        txt_col: column index of the text, first column is 0
+        label_col: column index of the label, first column is 0
+        rm_short: remove samples in the data whici are shorter than the assigned length 
+        is_remove_special: whether to remove special symbols, e.g. *-.,(=)@#$%~/\][
+        remove_list: words (regular expression) to be removed from the raw data, e.g. ['今天','^0']
         << outputs >>
         [file] 
             self.wkdir+'output/stat_data.pkl': (self.data)
         [var] 
-            self.data: the loaded data
+            self.dada: the read file
         ''' 
     def run_stat(self):
         '''
@@ -33,7 +37,7 @@ class nlp_stat(nlp_base):
         [file]
             self.wkdir+'output/stat_freq.pkl' (word_freq)
         [var]
-			token_freq: the frequency of each token
+			token_freq: a dict, the frequency of each token
         '''
     def vis_stat(self, n_show = 60, ex_words = (), lang = 'tc'):
         '''
@@ -65,15 +69,15 @@ class nlp_model(nlp_base):
                     remove_list = (), is_shuffle = True):
         '''
         << summary >>
-        load scratch data, data must be three columns: [acct_num, label, address]
+        load and clean scratch data, data must be in csv format
         << inputs >>
         read_csv: a list contains all data files, e.g. ['data1.csv', 'data2.csv']
         sep: symbol used in data file to seperate columns
-        txt_col: column index of the text
-        label_col: column index of the label
-        rm_short: remove data shorter than the assigned length 
-        is_remove_special: whether to remove special symbols
-        remove_list: words to be removed from the raw data
+        txt_col: column index of the text, first column is 0
+        label_col: column index of the label, first column is 0
+        rm_short: remove samples in the data whici are shorter than the assigned length 
+        is_remove_special: whether to remove special symbols, e.g. *-.,(=)@#$%~/\][
+        remove_list: words (regular expression) to be removed from the raw data, e.g. ['今天','^0']
         is_shuffle: whether to shuffle the data
         << outputs >>
         [file] 
@@ -85,9 +89,10 @@ class nlp_model(nlp_base):
                         ex_words = (), test_split = 0.1, is_shuffle = True ):
         '''
         << summary >>
-        preprocessing data for training and testing
+        preprocessing data for training and testing. it contains several steps:
+		tokenize -> build dict -> text padding -> text to sequence -> split train and test set
         << inputs >>
-        padding_size: padding_size of each address
+        padding_size: padding_size of each text sample
         padding_mode: how to perform text padding, 'back'/'front'
             'back' => keep first padding_size words, put zero in the back
             'front' => keep last padding_size words, put zero in the front 
@@ -101,7 +106,7 @@ class nlp_model(nlp_base):
             y_train: label for training
             x_test: sequence vectors for testing
             y_test: label for testing
-            token_dict: token dictionary
+            token_dict: token dictionary used for text to sequence
         [file]
             self.wkdir+'output/model_seq_data.pkl' (x_train, y_train, x_test, y_test)
             self.wkdir+'output/model_token_dict.pkl' (token_dict)
@@ -111,7 +116,7 @@ class nlp_model(nlp_base):
                 cell_size = 128, dense_size = 20, dr = 0.4):
         '''
         << summary >>
-        build keras model
+        build keras RNN model
         << inputs >>
         embedding_size: dimension of the embedding layer
         is_bidirectional: whether the model is bidirectional
@@ -138,14 +143,15 @@ class nlp_model(nlp_base):
         verbose: 1: silent, 2: progress bar, 3: one line per epoch
         << outputs >>
         [var]
-            history
+            keras history object 
+			A History object. Its History.history attribute is a record of training loss values and metrics values at successive epochs.
         [file]
             self.wkdir+'/output/model.h5': keras model object
         '''
     def test(self, binary_threshold = 0.5):
         '''
         << summary >>
-        test performance of the model 
+        evaulate the performance of the model using the test set prepared via preprocessing
         << inputs >>
         binary_threshold: threshold for binary classification, only use when total_class = 2
         << outputs >>
@@ -165,28 +171,30 @@ class nlp_predict(nlp_base):
         is_remove_special = True, remove_list = (), is_save_pkl = False):
         '''
         << summary >>
-        load scratch data, data must be three columns: [acct_num, label, address]
+        load and clean scratch data, data must be in csv format
         << inputs >>
         read_csv: a list contains all data files, e.g. ['data1.csv', 'data2.csv']
         sep: symbol used in data file to seperate columns
-        txt_col: column index of the text
-        label_col: column index of the label
-        rm_short: remove data shorter than the assigned length 
-        is_remove_special: whether to remove special symbols
-        remove_list: words to be removed from the raw data
+        txt_col: column index of the text, first column is 0
+        label_col: column index of the label, first column is 0
+        rm_short: remove samples in the data whici are shorter than the assigned length 
+        is_remove_special: whether to remove special symbols, e.g. *-.,(=)@#$%~/\][
+        remove_list: words (regular expression) to be removed from the raw data, e.g. ['今天','^0']
         is_shuffle: whether to shuffle the data
         << outputs >>
         [file] 
-            self.wkdir+'output/predict_data.pkl': (self.data)
+            self.wkdir+'output/stat_data.pkl': (self.data)
         [var] 
             self.dada: the read file
         ''' 
+		
+		def predict(self, dict_file, model_file, padding_mode = 'back', is_metric = False):
         '''
         << summary >>
-        to predict the probability of fraud address 
+        to predict the probability of each class
         << inputs >>
-        dict_file: file name of the pretrained dict file (must be in cache folder)
-        model_file: file name of the pretrained Keras model file (must be in cache folder)
+        dict_file: file path of the pretrained dict file
+        model_file: file name of the pretrained Keras model file
         padding_mode: how to perform text padding, 'back'/'front'
             'back' => keep first padding_size words, put zero in the back
             'front' => keep last padding_size words, put zero in the front 
@@ -195,7 +203,7 @@ class nlp_predict(nlp_base):
         [file]
             self.wkdir+'output/predict_result.pkl': (y_pred_prob)
         [var]
-            y_pred_prob: the predicted probability of addresses in self.data
+            y_pred_prob: the predicted probability of each class, a numpy array
         '''
     def output(self, output_file = 'predict_result.txt'):
         '''

@@ -5,7 +5,7 @@
 # 歡迎來到Project CNLP
 CNLP是一個基於Python以及深度學習來完成文本分類以及情緒預測的中文自然語言處理包（同時支援繁體與簡體）。 它能夠幫助使用者使用極少的命令(3~5行)就快速的完成高頻詞統計，建構深度學習模型，以及預測未知數據。這個工具包總共含有三個主要的功能：   
 * 高頻詞統計(NLP_Stat)：這個模組可以幫助使用者快速的載入數據，清洗文本資料，進行中文分詞，並進行高頻詞統計。並以將高頻詞以圖表方式呈現，幫助使用者快速的對文本數據的特性有個大致的了解。
-* 深度學習建模型(NLP_Model)：這個模組能夠幫助使用者透過簡單的輸入幾個參數就快速進行數據切割以及轉換成相應的輸入向量。此模組還能夠幫助使用者快速的建構一個深度學習RNN模型。目前支援多種典型的RNN模型，包括單向以及雙向的RNN。此外模型亦支援多種RNN cell，包括Simple RNN, GRU,以及 LSTM。在模型建構完成後亦可輕易地調用多種優化器(SGD, PRMprop, Adam)進行模型訓練以及測試。
+* 建構深度學習模型(NLP_Model)：這個模組能夠幫助使用者透過簡單的輸入幾個參數就快速進行數據切割以及轉換成相應的輸入向量。此模組還能夠幫助使用者快速的建構一個深度學習RNN模型。目前支援多種典型的RNN模型，包括單向以及雙向的RNN。此外模型亦支援多種RNN cell，包括Simple RNN, GRU,以及 LSTM。在模型建構完成後亦可輕易地調用多種優化器(SGD, PRMprop, Adam)進行模型訓練以及測試。
 * 未知數據預測(NLP_Pred): 這個模組能夠幫助使用者快速的調用已經訓練好的深度學習模型，並使用該模型對未知的數據進行數據清洗以及結果預測。
 
 # 背景介紹
@@ -49,25 +49,26 @@ CNLP是一個基於Python以及深度學習來完成文本分類以及情緒預�
  [Download CNNew10 & Hotel Review](https://my.pcloud.com/publink/show?code=XZ4loB7Z4XtW9zxRlS7LgWWVEuQmc8KrA5DX)
 
  # Usage:
- 1). To perform a calculation, just create an instance of corresponding NLP object. Then follow the procedure below to complete your calculation (as shown below).   
- 2). The order of the following command are not changable. However, you can perform each command separately, e.g. if you already performed freq.load_data() in your previous execution, the next time you can simple run freq.run_stat() without doing freq.load_data() again since the method load_data will save a pickle file in work_dir/output. The next time you run a subsequent command, the CNLP will automatically search for the Pickle file in this folder. However, you the data is already in memory, CNLP will not search for the Pickle file again (so it will be quicker especially for large data). Similar idea applies to all CNLP objects.    
- 3).  Also note that, by defult, you don't have to return anything of variable of each method. You will need returns unless you want to further process the data using your own codes.    
- 4).  The meaning of each variables can be found in the "doc" folder
+ * To perform a calculation, just create an instance of corresponding NLP object. Then follow the procedure below to complete your calculation (as shown below).   
+ * The order of the following command are not changable. However, you can perform each command separately, e.g. if you already performed freq.load_data() in your previous execution, the next time you can simply run freq.run_stat() without doing freq.load_data() again since the method load_data will save a pickle file in work_dir/output. The next time you run a subsequent command, CNLP will automatically search for the Pickle file in this folder. Similar idea applies to all the other CNLP objects.    
+ *  Also note that, by defult, you don't have to return anything of variable of each method. You will need returns unless you want to further process the data using your own codes.    
+ *  The meaning of each variables can be found in the "doc" folder
 
- * High-Frequency:
- <p align="center">
-  <img src="./img/stat_usage.png">
- </p>
+ * procedure of a task:
+	 * High-Frequency:
+	 <p align="center">
+	  <img src="./img/stat_usage.png">
+	 </p>
 
- * build deep learning model:
- <p align="center">
-  <img src="./img/model_usage.png">
- </p>
+	 * build deep learning model:
+	 <p align="center">
+	  <img src="./img/model_usage.png">
+	 </p>
  
- * predict unlabel data:
- <p align="center">
-  <img src="./img/pred_usage.png">
- </p>
+	 * predict unlabel data:
+	 <p align="center">
+	  <img src="./img/pred_usage.png">
+	 </p>
 
 
 
