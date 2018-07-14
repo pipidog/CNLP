@@ -55,7 +55,7 @@ CNLP是一個基於Python以及深度學習來完成文本分類以及情緒預�
 </p>
  * build deep learning model:
  <p align="center">
-  <img src="./img/model_logo.png">
+  <img src="./img/model_usage.png">
 </p>
  * predict unlabel data:
  <p align="center">
