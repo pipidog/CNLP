@@ -63,3 +63,4 @@ CNLP是一個基於Python以及深度學習來完成文本分類以及情緒預�
 </p>
 
  Note: By defult, you don't have to return anything of each method. You will need returns unless you want to further process the returned data using your own codes. 
+
