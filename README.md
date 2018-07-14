@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./img/CNLP_logo.png">
+  <img src="./img/CNLP_logo.png" width="200px"/>
 </p>
 
 # 歡迎來到Project CNLP
@@ -45,7 +45,7 @@ CNLP是一個基於Python以及深度學習來完成文本分類以及情緒預�
  Download the project, unzip it, add /CNLP to your python path.     
 
  # Examples & Dataset:
- Two examples and datasets (News10 & Hotel) can be downloaded here (~ 200 MB):
+ Two examples and datasets (News10 & Hotel) can be downloaded here (~ 200 MB):   
  [Download CNNew10 & Hotel Review](https://my.pcloud.com/publink/show?code=XZ4loB7Z4XtW9zxRlS7LgWWVEuQmc8KrA5DX)
 
  # Usage:
@@ -62,5 +62,7 @@ CNLP是一個基於Python以及深度學習來完成文本分類以及情緒預�
   <img src="./img/pred_usage.png">
 </p>
 
- Note: By defult, you don't have to return anything of each method. You will need returns unless you want to further process the returned data using your own codes. 
+ Note: By defult, you don't have to return anything of each method. You will need returns unless you want to further process the returned data using your own codes.
+
+
 
