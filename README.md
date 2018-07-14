@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./img/CNLP_logo.png" width="200px"/>
+  <img src="./img/CNLP_logo.png" width="600px"/>
 </p>
 
 # 歡迎來到Project CNLP
