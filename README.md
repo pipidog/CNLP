@@ -3,21 +3,21 @@
 </p>
 
 # 歡迎來到Project CNLP
-CNLP是一個基於Python以及深度學習來完成文本分類以及情緒預測的中文自然語言處理包（同時支援繁體與簡體）。 它能夠幫助使用者使用極少的命令(3~5行)就快速的完成高頻詞統計，建構深度學習模型，以及預測未知數據。這個工具包總共含有三個主要的功能：   
-* 高頻詞統計(NLP_Stat)：這個模組可以幫助使用者快速的載入數據，清洗文本資料，進行中文分詞，並進行高頻詞統計。並以將高頻詞以圖表方式呈現，幫助使用者快速的對文本數據的特性有個大致的了解。
-* 建構深度學習模型(NLP_Model)：這個模組能夠幫助使用者透過簡單的輸入幾個參數就快速進行數據切割以及轉換成相應的輸入向量。此模組還能夠幫助使用者快速的建構一個深度學習RNN模型。目前支援多種典型的RNN模型，包括單向以及雙向的RNN。此外模型亦支援多種RNN cell，包括Simple RNN, GRU,以及 LSTM。在模型建構完成後亦可輕易地調用多種優化器(SGD, PRMprop, Adam)進行模型訓練以及測試。
+CNLP是一個基於Python以及深度學習來完成文本分類以及情緒預測的中文自然語言處理包（同時支援繁體與簡體）。 它能夠幫助使用者使用快速的完成高頻詞統計，建構深度學習模型，以及預測未知數據。這個工具包總共含有三個主要的模組：   
+* 高頻詞統計(NLP_Stat)：這個模組可以幫助使用者快速的載入數據，清洗文本資料，中文分詞，高頻詞統計，並將高頻詞以圖表方式呈現，幫助使用者快速的對文本數據的特性有個大致的了解。
+* 建構深度學習模型(NLP_Model)：這個模組能夠幫助使用者快速進行大量的文本數據預處理，將中文文本轉換成相應的數值向量。此模組還能夠幫助使用者快速的建構一個典型的深度學習RNN，包括單向以及雙向的RNN，並支援多種RNN cell，包括Simple RNN, GRU,以及 LSTM。在模型建構完成後亦可輕易地調用多種優化器(SGD, PRMprop, Adam)進行模型訓練以及測試。
 * 未知數據預測(NLP_Pred): 這個模組能夠幫助使用者快速的調用已經訓練好的深度學習模型，並使用該模型對未知的數據進行數據清洗以及結果預測。
 
 # 背景介紹
-文本分類以及情緒分析是自然語言處理以及深度學習中常見的基本問題。目前已經有多種針對英文文本數據的自然語言處理工具包，但是對於中文的工具包仍然十分缺乏。因此建構了這個簡單的工具包希望能方便使用者快速的搭建深度學習模型做文本分析。本工具包的目的並不在提供強大的擴展性，而是希望在不失基本的彈性的情況下，讓使用者盡可能使用少量的命令來處理大多數的文本分類問題。    
+文本分類以及情緒分析是自然語言處理以及深度學習中常見的問題。目前已經有多種針對英文文本數據的自然語言處理工具包，但是對於中文的工具包仍然十分缺乏。因此建構了這個簡單的工具包來快速的搭建深度學習模型做文本數據分析。本工具包的目的並不在提供強大的擴展性，而是希望在不失基本的彈性的情況下，讓使用者盡可能使用少量的命令來處理大多數的文本分類問題。    
 
-中文數據和英文數據很大的不同在於切詞(tokenize)，因為英文裡面，每個單字會以一個空格做區隔，但是在中文裡面，中文詞彙之間並沒有類似的區隔符，這導致了要把中文詞彙做出正確的分割十分困難。為了解決這個問題，在CNLP中我們使用了jieba作為中文切詞引擎 (https://github.com/fxsjy/jieba) ,jieba是一個相當優秀的python中文切詞工具，除了能自動分詞之外，使用者也可依據自己的需求來增加或刪除詞彙，並調整詞頻高低。在CNLP中，你能夠使用簡單的函數就調用jieba處理大多數的中文文本場景。
+中文數據和英文數據很大的不同在於切詞(tokenize)，因為英文裡面，每個單字會以一個空格做區隔，但是在中文裡面，中文詞彙之間並沒有類似的區隔符，這導致了要把中文詞彙做出正確的分割十分困難。為了解決這個問題，在CNLP中我們使用了jieba作為中文切詞引擎 (https://github.com/fxsjy/jieba) ,jieba是一個相當優秀的python中文切詞工具，除了能自動切詞之外，使用者也可依據自己的需求來增加或刪除詞彙，並調整詞頻高低。在CNLP中，你能夠使用簡單的函數就調用jieba處理大多數的中文文本場景。
 
-在深度學習方面，CNLP能夠對文本數據進行預處理，將文本數據轉換成訓練所需的向量形式，並使用了Keras以及Tensorflow來進行深度學習。裡面已經預先架構好了一個能適用大多數場景的深度學習RNN模型，使用者能夠依據自己的需求來調整模型的方向性(單向或雙向RNN)，模型的深度，以及相關的超參數等。在訓練完畢之後，CNLP亦可調用已經訓練好的深度學習模型來對未知的數據進行預測。
+在深度學習方面，CNLP能夠對文本數據進行預處理，將文本數據轉換成訓練所需的向量形式，並使用了Keras以及Tensorflow來進行深度學習。裡面已經預先架構好了一個能適用大多數場景的深度學習RNN模型，使用者能夠依據自己的需求來調整模型相關的參數。在訓練完畢之後，CNLP亦可調用已經訓練好的深度學習模型來對未知的數據進行預測。
 
-此外，由於中文自然語言處理的數據極其缺乏，在CNLP裡面也整理了兩個數據集供使用者測試。第一個數據集是來自攜程網的酒店評論數據，這個數據量偏少，正負評各約一千則（如果有更大的中文情緒分析數據集也請來信告知，讓我加入其中），作為深度學習之用太小了，主要是供大家練測試之用。第二個數據集是來自北京清華大學的THUCNews，這個數據集包含十四個類別，超過七十萬則新聞，整個數據超過1.5G，太大了，不適合做為測試之用，因此我們採用了網路上提供的另一個精簡化版本 (https://github.com/gaussic/text-classification-cnn-rnn) ,在這個簡化版本中，共有十個類別，共50000條訓練數據，5000條驗證數據，以及10000條測試數據。以上兩個數據集已經完成了基本的數據清洗，並且上好了相應的標籤。使用者可以在程式裡面直接使用不用再做任何處理。此外為了滿足不同中文使用者的需求，兩個數據集都提供了簡體以及繁體中文的版本，方便不同的使用者使用。
+由於中文自然語言處理的數據極其缺乏，在CNLP裡面也整理了兩個數據集供使用者測試。第一個數據集是來自攜程網的酒店評論數據，這個數據量偏少，正負評各約一千則（如果有更大的中文情緒分析數據集也請來信告知，讓我加入其中），作為深度學習之用太小了，但主要是供大家測試之用。第二個數據集是來自北京清華大學的THUCNews，這個數據集包含十四個類別，超過七十萬則新聞，整個數據超過1.5G，太大了，不適合做為測試之用，因此我們採用了網路上提供的另一個簡化版本 (https://github.com/gaussic/text-classification-cnn-rnn) ,在這個簡化版本中，共有十個類別，50000條訓練數據，5000條驗證數據，以及10000條測試數據。以上兩個數據集已經完成了基本的數據清洗，並且上好了相應的標籤。使用者可以在程式裡面直接使用不用再做任何處理。此外為了滿足不同中文使用者的需求，兩個數據集都提供了簡體以及繁體中文的版本。
 
-考量到使用者可能會有自己的需求，因此CNLP的設計是，每一步執行完後都可以把結果儲存成pickle檔，以供日後調用。因此除了使用CNLP來進行完整的分析外，使用者亦可使用CNLP來進行部分的預處理，搭配自己的程式使用，增加了CNLP的彈性。
+考量到使用者可能會有自己的需求，因此CNLP的設計是，每一步執行完後都會將結果儲存成pickle檔，以供日後調用(亦可以參數方式輸出)。因此除了使用CNLP來進行完整的分析外，亦可使用CNLP來進行部分的預處理，搭配自己的程式使用，增加了CNLP的彈性。
 
 # Welcome to Project CNLP
  CNLP is a python-based deep learning natural language processing toolkit for Chinese text classification and sentiment analysis (both Traditional and Simplified Chinese). It helps users finish a job such as analysis of high-frequency words, building deep learning models, and prediction of unlabeled data with only few commands (usually 3~5 lines). CNLP consists of three pars:   
@@ -39,7 +39,7 @@ CNLP是一個基於Python以及深度學習來完成文本分類以及情緒預�
  # Requirement:
  To use CNLP, please make sure you have the follow python package installed:  
  * numpy, matplotlib, seaborn, pandas, sklearn, nltk (Already inculded in Anaconda). 
- * jieba, tensorflow, keras (not inculded in Anaconda). 
+ * jieba, tensorflow, keras, tqdm (not inculded in Anaconda). 
 
  # Instillation:
  Download the project, unzip it, add /CNLP to your python path.     
@@ -49,9 +49,9 @@ CNLP是一個基於Python以及深度學習來完成文本分類以及情緒預�
  [Download CNNew10 & Hotel Review](https://my.pcloud.com/publink/show?code=XZ4loB7Z4XtW9zxRlS7LgWWVEuQmc8KrA5DX)
 
  # Usage:
- * To perform a calculation, just create an instance of corresponding NLP object. Then follow the procedure below to complete your calculation (as shown below).   
- * The order of the following command are not changable. However, you can perform each command separately, e.g. if you already performed freq.load_data() in your previous execution, the next time you can simply run freq.run_stat() without doing freq.load_data() again since the method load_data will save a pickle file in work_dir/output. The next time you run a subsequent command, CNLP will automatically search for the Pickle file in this folder. Similar idea applies to all the other CNLP objects.    
- *  Also note that, by defult, you don't have to return anything of variable of each method. You will need returns unless you want to further process the data using your own codes.    
+ * To perform a calculation, just create an instance of corresponding CNLP object. Then follow the procedure below to complete your calculation.   
+ * The order of the following command are not interchangable (you cannot perform a calculation without loading the data first, right?). However, you can perform each command separately, e.g. if you already performed freq.load_data() in your previous execution, the next time you can simply run freq.run_stat() without doing freq.load_data() again since the method load_data will save a pickle file in work_dir/output and, in a subsequent command, CNLP will automatically load for the Pickle file. Similar idea applies to all the other CNLP objects.    
+ *  Also note that, by defult, you don't have to return any variable of each method. You will need these returns unless you want to further process the data using your own codes.    
  *  The meaning of each variables can be found in the "doc" folder
 
  * procedure of a task:
