@@ -26,17 +26,17 @@ CNLP是一個基於Python以及深度學習來完成文本分類以及情緒預�
 # 深度學習模型
 為了方便使用者快速建立深度學習模型，在CNLP中提供了兩種典型的文本分類模型，分別是RNN以及n-gram CNN。
 
-## RNN
-使用RNN處理NLP是一種相當自然的做法，每個詞向量先被表示成孤熱編碼形式（one-hot)，而後被送入word embedding層進行壓縮。在這裡我們並沒有使用任何Pretrained word embedding，所有的embedding參數都是透過數據本身訓練得出的。而後這些被壓縮過後的詞坎入向量會送往一個深度RNN層（深度由使用者定義），而RNN層輸出的向量會再送往一個dense layer最後送到機率輸出層，模型的示意圖表示如下：（見英文版部分附圖）
+## RNN 
+使用RNN處理NLP是一種相當自然的做法，每個詞向量先被表示成孤熱編碼形式（one-hot)，而後被送入word embedding層進行壓縮 。在這裡我們並沒有使用任何Pretrained word embedding，所有的embedding參數都是透過數據本身訓練得出的。而後這些被壓縮過後的詞坎入向量會送往一個深度RNN層（深度由使用者定義），而RNN層輸出的向量會再送往一個dense layer最後送到機率輸出層，模型的示意圖表示如下：（見英文版部分附圖）
 
-在本模型中，使用者需要定義的是embedding層的大小(i.e. 輸入向量要被壓縮的維度)，RNN層要使用何種cell(Simple RNN, LSTM, GRU)，每個cell中neuron的數目，RNN層的深度(本圖中，深度為3)，以及最後用來執行fine tuning的dense layer的大小。圖中最後一層dense layer是機率輸出層，所以大小和分類的類別數相同，因此使用者無需自訂。另外每個RNN cell中都採用了dropout，所以使用者亦需給定dropout rate。
+在本模型中，使用者需要定義的是embedding層的大小( i.e. 輸入向量要被壓縮的維度)，RNN層要使用何種cell (Simple RNN, LSTM, GRU)，每個cell中neuron的數目，RNN層的深度 (本圖中，深度為3)，以及最後用來執行fine tuning的de nse layer的大小。圖中最後一層dense layer 是機率輸出層，所以大小和分類的類別數相同，因此使用者無需自訂。另外每個RNN cell中都採用了dropout，所以使用者亦需給定dropout rate。
 
-一般來說，深度RNN計算量較大，且較不易訓練，也較容易產生性能飽和，但是如果文本的特性具有相當的長程關聯性(i.e. 文本前後間的關聯性高，難以靠識別幾個關鍵字就抓出主題)，則使用RNN是必要的。不過在一般的情況下，我們建議使用者優先考慮n-gram CNN。
+一般來說，深度RNN計算量較大，且較不易訓練， 也較容易產生性能飽和，但是如果文本的特性具有相當的長程關聯性 (i.e. 文本前後間的關聯性高，難以靠識別幾個關鍵字就抓出主題)，則使用 RNN是必要的。不過在一般的情況下，我們建議使用者優先考慮n-gram CNN。
 
 ## n-gram CNN
-n-gram CNN是最年來開始興起的NLP文本分類方法，最早是2014年由NYU的[Yoon Kim (arXiv:1408.5882)](https://arxiv.org/abs/1408.5882) 所提出，該論文提出後立刻引起了廣泛的注意，在短短三年間就累積了超過兩千次的引用率，其後有諸多改良版本被提出，在這CNLP中我們採用的是由UT Austin的 [Y. Zhang & B. Wallace (arXiv:1510.03820)](https://arxiv.org/abs/1510.03820)所提出的架構，該架構可表示如下：(見英文版部分附圖)
+n-gram CNN是最年來開始興起的NLP文本分類方法，最早是2014年由NYU的[Yoon Kim (arXiv:1408.5882)](https://arxiv.org/abs/1408.5882) 所提出，該論文提出後立刻引起了廣泛的注意，在短短三年間就累積了超過兩千次的引用率，其後有諸多改良版本被提出，在這CNLP中我們採用的是由UT Austin的 [Y. Zhang & B. Wallace (arXiv:1510.03820)](https://arxiv.org/abs/1510.03820) 所提出的架構，該架構可表示如下：(見英文版部分附圖)
 
-在本模型中，使用者需要給定的參數包括要使用哪些n-gram，n-gram給定的越多，上圖中的卷積層分支就會越多，（一般建議可從n_gram = [2,3,4])開始嘗試，則會如上圖共有三個分支，分別執行n=2,3,4的卷積)，最後送到global max pooling層（使用global max pooling而不用一般的max pooling是近年來叫流行的做法，諸多實驗表明這可以減少overfitting，提升計算性能，同時又不影響模型表現，這也是Z&W的論文中所建議採取的方法。因此CNLP中我們也採用此法，減少輸入參數與使用者的困擾)，而後經由一個dropout送到輸出層。同樣的，該輸出dense層的大小必須等同於分類的類別數，因此無需使用者自訂大小。
+在本模型中，使用者需要給定的參數包括要使用哪些 n-gram，n-gram給定的越多，上圖中的卷積層分支就會越多， （一般建議可從n_gram = [2,3,4])開始嘗試， 則會如上圖共有三個分支，分別執行n=2,3,4的卷積)，最後送到global max pooling層（使用global max pooling而不用一般的max pooling是近年來叫流行的做法，諸多實驗表明這可以減少overfitting，提升計算性能，同時又不影響模型表現，這也是Z&W的論文中所建議採取的方法。因此CNLP中我們也採用此法，減少輸入參數與使用者的困擾)，而後經由一個dropout送到輸出層。同樣的，該輸出dense層的大小必須等同於分類的類別數，因此無需使用者自訂大小。
 
 從上面的討論可以發現，n-gram CNN所需要給定的參數相當少，另外計算速度也相當快，在許多測試中的表現亦優於RNN，因此一般的情況下，我們建議使用者優先嘗試n-gram CNN。
 
@@ -68,7 +68,7 @@ n-gram CNN是最年來開始興起的NLP文本分類方法，最早是2014年由
 
 <p align="center">
 <img src="./img/model_rnn.png">
-<em>An illustion of RNN with depth=3</em>
+<em> An illustion of RNN with depth=3</em>
 </p>
 
 In this model, the users need to define the size of the embedding layer, the cell of RNN layer (Simple RNN, LSTM, GRU), the size of each cell, the depth of the RNN layer (in the figure, the depth is set 3), and finall the size of a  dense layer for fine tuning. The last dense layer is to output probability which will always be the size of the categories in your data. Besides, each RNN cell also comes with dropout to prevent from overfitting, so the dropout rate is also an input to the model. 
@@ -76,7 +76,7 @@ In this model, the users need to define the size of the embedding layer, the cel
 In general, RNN is more expensive and more difficult for training. Therefore, it is recommend to consider n-gram CNN first. 
 
 ## n-gram CNN
-n-gram CNN is a new and popular approach for text classification. It was first proposed by [Yoon Kim (arXiv:1408.5882)](https://arxiv.org/abs/1408.5882) from NYU in 2014. This paper was cited more than 2000 times within three years. After that, many improved version appeared such as  [Y. Zhang & B. Wallace (arXiv:1510.03820)](https://arxiv.org/abs/1510.03820), which is also the framework we used here. An illustration is shown below:   
+n-gram CNN is a new and popular approach for text classification. It was first proposed by [Yoon Kim (arXiv:1408.5882)](https://arxiv.org/abs/1408.5882) from NYU in 2014. This paper was cited more than 2000 times within three years. After that, many improved version appeared such as  [Y. Zhang & B. Wallace (arXiv:1510.03820)](https://arxiv.org/abs/1510.03820) , which is also the framework we used here. An illustration is shown below:   
 
 <p align="center">
 <img src="./img/model_cnn.png">
@@ -94,8 +94,6 @@ Based on the discussion above, the hyperparameters are much less than RNN. Also 
  * jieba, tensorflow, keras, tqdm (not inculded in Anaconda). 
 
  * graphviz, pydot ([optional, only if you want output your model as a png file](https://keras.io/#installation))
-
- * jieba, tensorflow, keras, tqdm (not inculded in Anaconda). 
 
 
  # Instillation:
