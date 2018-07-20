@@ -1,14 +1,16 @@
-import sys
-import pickle
 import os
+import pickle
+import sys
+
 import numpy as np
 import pandas as pd
-
-from keras.layers import GRU, LSTM, SimpleRNN, Dense, Bidirectional
+from keras.layers import (GRU, LSTM, Bidirectional, Concatenate, Conv1D, Dense,
+                          Dropout, GlobalMaxPooling1D, Input, SimpleRNN)
 from keras.layers.embeddings import Embedding
-from keras.models import Sequential, load_model
-from keras.optimizers import RMSprop, Adam, SGD
-from keras.utils import to_categorical
+from keras.models import Model, Sequential, load_model
+from keras.optimizers import SGD, Adam, RMSprop
+from keras.utils import to_categorical, plot_model
+
 from CNLP.NLP_Base import nlp_base
 
 np.random.seed(0)
@@ -125,7 +127,7 @@ class nlp_model(nlp_base):
 
         return x_train, y_train, x_test, y_test, token_dict
 
-    def build(self, embedding_size = 128, is_bidirectional = False, depth = 3, cell = 'GRU', 
+    def build_rnn(self, embedding_size = 128, is_bidirectional = False, depth = 3, cell = 'GRU', 
                 cell_size = 128, dense_size = 20, dr = 0.4):
         '''
         << summary >>
@@ -144,7 +146,7 @@ class nlp_model(nlp_base):
         [var]:
             model: the keras model object
         '''
-        print('\n\n>>>>>>>>>> build <<<<<<<<<<')
+        print('\n\n>>>>>>>>>> build RNN model <<<<<<<<<<')
         # load token_dict_size and padding_size
         token_dict_size, padding_size = \
             pickle.load(open(self.wkdir+'/output/model_preprocessing_tmp.pkl','rb'))
@@ -177,6 +179,44 @@ class nlp_model(nlp_base):
             model.add(Dense(1, activation='sigmoid'))
         else:
             model.add(Dense(self.tot_class, activation='softmax'))     
+        print(model.summary())   
+        plot_model(model, self.wkdir+'output/model.png', show_shapes = True)
+        model.save(self.wkdir+'/output/model.h5')
+
+        return model
+
+    def build_cnn(self, embedding_size = 128, n_gram = [2,3,4], filters = 32, dr = 0.5):
+        print('\n\n>>>>>>>>>> build CNN model <<<<<<<<<<')
+        # load token_dict_size and padding_size
+        token_dict_size, padding_size = \
+            pickle.load(open(self.wkdir+'/output/model_preprocessing_tmp.pkl','rb'))
+
+        # (batch_size, padding_size)
+        x_in = Input(shape=(padding_size,))
+        # (batch_size, padding_size, embedding_size)
+        embedding = Embedding(token_dict_size+1, embedding_size)(x_in)
+        pooling_out = []
+        for n in n_gram:
+            # (batch_size, padding_size, filters)
+            conv = Conv1D(filters = filters, kernel_size=n, strides=1, padding='same', activation='relu')(embedding)
+            # (batch_size, padding_size, filters)
+            drop = Dropout(dr)(conv)
+            # (batch_size, filters)
+            pooling = GlobalMaxPooling1D()(drop)
+            # append all pooling outputs
+            pooling_out.append(pooling)
+        # (batch_size, filters*len(n_gram))
+        merged = Concatenate()(pooling_out)
+        drop = Dropout(dr)(merged)
+
+        if self.tot_class ==2:
+            x_out = Dense(1, activation = 'sigmoid')(drop)
+        else:
+            x_out = Dense(self.tot_class, activation = 'softmax')(drop)
+
+        model = Model(inputs = x_in, outputs = x_out)
+
+        plot_model(model, self.wkdir+'output/model.png', show_shapes = True)
         print(model.summary())          
         model.save(self.wkdir+'/output/model.h5')
 
