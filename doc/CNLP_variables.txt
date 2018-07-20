@@ -1,0 +1,219 @@
+class nlp_stat(nlp_base):
+    def __init__(self,wkdir = os.getcwd()+'/'):
+        '''
+        << summary >>
+        initialize the class
+        << inputs >>
+        wkdir: working directory where the data are stored
+        << outputs >>
+        None
+        '''
+    def load_data(self, read_csv, sep='@', txt_col = 0, label_col = 1, rm_short = 0,
+                is_remove_special = True, remove_list = ()):
+        '''
+        << summary >>
+        load and clean scratch data, data must be in csv format
+        << inputs >>
+        read_csv: a list contains all data files, e.g. ['data1.csv', 'data2.csv']
+        sep: symbol used in data file to seperate columns
+        txt_col: column index of the text, first column is 0
+        label_col: column index of the label, first column is 0
+        rm_short: remove samples in the data whici are shorter than the assigned length 
+        is_remove_special: whether to remove special symbols, e.g. *-.,(=)@#$%~/\][
+        remove_list: words (regular expression) to be removed from the raw data, e.g. ['今天','^0']
+        << outputs >>
+        [file] 
+            self.wkdir+'output/stat_data.pkl': (self.data)
+        [var] 
+            self.dada: the read file
+        ''' 
+    def run_stat(self):
+        '''
+        << summary >>
+        count high frequency words 
+        << inputs >>
+        None
+        << outputs >>
+        [file]
+            self.wkdir+'output/stat_freq.pkl' (word_freq)
+        [var]
+			token_freq: a dict, the frequency of each token
+        '''
+    def vis_stat(self, n_show = 60, ex_words = (), lang = 'tc'):
+        '''
+        << summary >>
+        visualize high frequency words
+        << input >>
+        fontdir: chinese font directory to be used for matplotlib, file name must be zh-font.ttf
+        n_show: top-n words to show
+        ex_words: a list contains the words to be excluded in the plot
+        << outputs >>
+        [file]
+            self.wkdir+'output/stat_freq.png', plot of the high frequency data
+        [var]
+            None
+        ''' 
+		
+class nlp_model(nlp_base):
+    def __init__(self, tot_class, wkdir = os.getcwd()+'/'):
+        '''
+        << summary >>
+        initialize the class
+        << inputs >>
+		tot_class: total class of the model, if binary use 2
+        wkdir: working directory where the data are stored
+        << outputs >>
+        None
+        '''
+    def load_data(self, read_csv, sep='@', txt_col = 0, label_col = 1, rm_short = 0, is_remove_special = True,
+                    remove_list = (), is_shuffle = True):
+        '''
+        << summary >>
+        load and clean scratch data, data must be in csv format
+        << inputs >>
+        read_csv: a list contains all data files, e.g. ['data1.csv', 'data2.csv']
+        sep: symbol used in data file to seperate columns
+        txt_col: column index of the text, first column is 0
+        label_col: column index of the label, first column is 0
+        rm_short: remove samples in the data whici are shorter than the assigned length 
+        is_remove_special: whether to remove special symbols, e.g. *-.,(=)@#$%~/\][
+        remove_list: words (regular expression) to be removed from the raw data, e.g. ['今天','^0']
+        is_shuffle: whether to shuffle the data
+        << outputs >>
+        [file] 
+            self.wkdir+'output/stat_data.pkl': (self.data)
+        [var] 
+            self.dada: the read file
+        ''' 
+	def preprocessing(self, padding_size = 20, padding_mode = 'back', max_words = 20000, 
+                        ex_words = (), test_split = 0.1, is_shuffle = True ):
+        '''
+        << summary >>
+        preprocessing data for training and testing. it contains several steps:
+		tokenize -> build dict -> text padding -> text to sequence -> split train and test set
+        << inputs >>
+        padding_size: padding_size of each text sample
+        padding_mode: how to perform text padding, 'back'/'front'
+            'back' => keep first padding_size words, put zero in the back
+            'front' => keep last padding_size words, put zero in the front 
+        max_words: max_words in the generated dictionary
+        ex_words: words to be excluded from the dictionary
+        test_split: portion of splitting test data
+        is_shuffle: whether to shuffle data
+        << outputs >>
+        [var]
+            x_train: sequence vectors for training
+            y_train: label for training
+            x_test: sequence vectors for testing
+            y_test: label for testing
+            token_dict: token dictionary used for text to sequence
+        [file]
+            self.wkdir+'output/model_seq_data.pkl' (x_train, y_train, x_test, y_test)
+            self.wkdir+'output/model_token_dict.pkl' (token_dict)
+            self.wkdir+'output/model_token_dict.txt' (token_dict in txt format)
+        '''
+    def build(self, embedding_size = 128, is_bidirectional = False, depth = 3, cell = 'GRU', 
+                cell_size = 128, dense_size = 20, dr = 0.4):
+        '''
+        << summary >>
+        build keras RNN model
+        << inputs >>
+        embedding_size: dimension of the embedding layer
+        is_bidirectional: whether the model is bidirectional
+        depth: depth of the RNN neural network
+        cell: cell of the RNN neuron, 'SimpleRNN'/'GRU'/'LSTM'
+        cell_size: number of neurons of each cell
+        dense_size: size of the final fully-connected layer
+        dr: dropout rate for RNN and the final fully-connected layer
+        << outputs >>
+        [file]:
+            self.wkdir+'/output/model.h5': the model file
+        [var]:
+            model: the keras model object
+        '''
+    def train(self, optimizer = 'RMSprop', lr = 0.001, batch_size = 128, epochs = 10, validation_split = 0.1, verbose = 1):
+        '''
+        << summary >>
+        train the model
+        << inputs >>
+        optimizer: the optimizer, 'RMSprop'/'SGD'/'Adam'
+        batch_size: training batch size
+        epochs: number of training epochs
+        validation_split: portion of total data for validation
+        verbose: 1: silent, 2: progress bar, 3: one line per epoch
+        << outputs >>
+        [var]
+            keras history object 
+			A History object. Its History.history attribute is a record of training loss values and metrics values at successive epochs.
+        [file]
+            self.wkdir+'/output/model.h5': keras model object
+        '''
+    def test(self, binary_threshold = 0.5):
+        '''
+        << summary >>
+        evaulate the performance of the model using the test set prepared via preprocessing
+        << inputs >>
+        binary_threshold: threshold for binary classification, only use when total_class = 2
+        << outputs >>
+        metric: the metrics, a dictionary contains all metrics
+        '''
+class nlp_predict(nlp_base):
+    def __init__(self, tot_class, wkdir = os.getcwd()+'/' ):
+        '''
+        << summary >>
+        initial the class
+        << inputs >>
+		tot_class: tot_class of the model, if binary use 2
+        wkdir: working folder, i.e. where data are put        << outputs >>
+        None
+        '''
+    def load_data(self, read_csv, sep='@', txt_col = 0, label_col = 1, rm_short = 0, 
+        is_remove_special = True, remove_list = (), is_save_pkl = False):
+        '''
+        << summary >>
+        load and clean scratch data, data must be in csv format
+        << inputs >>
+        read_csv: a list contains all data files, e.g. ['data1.csv', 'data2.csv']
+        sep: symbol used in data file to seperate columns
+        txt_col: column index of the text, first column is 0
+        label_col: column index of the label, first column is 0
+        rm_short: remove samples in the data whici are shorter than the assigned length 
+        is_remove_special: whether to remove special symbols, e.g. *-.,(=)@#$%~/\][
+        remove_list: words (regular expression) to be removed from the raw data, e.g. ['今天','^0']
+        is_shuffle: whether to shuffle the data
+        << outputs >>
+        [file] 
+            self.wkdir+'output/stat_data.pkl': (self.data)
+        [var] 
+            self.dada: the read file
+        ''' 
+		
+		def predict(self, dict_file, model_file, padding_mode = 'back', is_metric = False):
+        '''
+        << summary >>
+        to predict the probability of each class
+        << inputs >>
+        dict_file: file path of the pretrained dict file
+        model_file: file name of the pretrained Keras model file
+        padding_mode: how to perform text padding, 'back'/'front'
+            'back' => keep first padding_size words, put zero in the back
+            'front' => keep last padding_size words, put zero in the front 
+        is_metric: whether the evaulate metrics based on the label of the data
+        << outputs >>
+        [file]
+            self.wkdir+'output/predict_result.pkl': (y_pred_prob)
+        [var]
+            y_pred_prob: the predicted probability of each class, a numpy array
+        '''
+    def output(self, output_file = 'predict_result.txt'):
+        '''
+        << summary >>
+        output a table that contains the cleaned data and predicted probability and classes
+        << inputs >>
+        output_file: file name of the output csv file (will be put in wkdir)
+         << outputs >>
+         [var]
+            df: the pandas dataframe with predicted results
+        [file]
+            self.wkdir+'output/'+output_file
+        '''

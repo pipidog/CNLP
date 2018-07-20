@@ -3,6 +3,7 @@
 </p>
 
 # 歡迎來到Project CNLP
+
 CNLP是一個基於Python以及深度學習來完成文本分類以及情緒預測的中文自然語言處理包（同時支援繁體與簡體）。 它能夠幫助使用者使用快速的完成高頻詞統計，建構深度學習模型，以及預測未知數據。這個工具包總共含有三個主要的模組：  
 
 * 高頻詞統計(NLP_Stat)：這個模組可以幫助使用者快速的載入數據，清洗文本資料，中文分詞，高頻詞統計，並將高頻詞以圖表方式呈現，幫助使用者快速的對文本數據的特性有個大致的了解。
@@ -94,6 +95,9 @@ Based on the discussion above, the hyperparameters are much less than RNN. Also 
 
  * graphviz, pydot ([optional, only if you want output your model as a png file](https://keras.io/#installation))
 
+ * jieba, tensorflow, keras, tqdm (not inculded in Anaconda). 
+
+
  # Instillation:
  Download the project, unzip it, add /CNLP to your python path.     
 
@@ -125,6 +129,7 @@ Based on the discussion above, the hyperparameters are much less than RNN. Also 
 	 <p align="center">
 	  <img src="./img/pred_usage.png">
 	 </p>
+
 
 
 
