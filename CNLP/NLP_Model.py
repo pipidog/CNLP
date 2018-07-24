@@ -180,7 +180,14 @@ class nlp_model(nlp_base):
         else:
             model.add(Dense(self.tot_class, activation='softmax'))     
         print(model.summary())   
-        plot_model(model, self.wkdir+'output/model.png', show_shapes = True)
+        try:
+            import pydot
+        except:
+            print('\n ==> plot_model is not available, model will not output in png format\n')
+        else:
+            print('\n ==> model has been output to '+self.wkdir+'output/model.png\n')
+            plot_model(model, self.wkdir+'output/model.png', show_shapes = True)
+
         model.save(self.wkdir+'/output/model.h5')
 
         return model
@@ -215,9 +222,16 @@ class nlp_model(nlp_base):
             x_out = Dense(self.tot_class, activation = 'softmax')(drop)
 
         model = Model(inputs = x_in, outputs = x_out)
+        print(model.summary()) 
+        
+        try:
+            import pydot
+        except:
+            print('\n ==> plot_model is not available, model will not output in png format\n')
+        else:
+            print('\n ==> model has been output to '+self.wkdir+'output/model.png\n')
+            plot_model(model, self.wkdir+'output/model.png', show_shapes = True)
 
-        plot_model(model, self.wkdir+'output/model.png', show_shapes = True)
-        print(model.summary())          
         model.save(self.wkdir+'/output/model.h5')
 
         return model
