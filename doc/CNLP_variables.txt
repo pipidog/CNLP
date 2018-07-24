@@ -112,7 +112,7 @@ class nlp_model(nlp_base):
             self.wkdir+'output/model_token_dict.pkl' (token_dict)
             self.wkdir+'output/model_token_dict.txt' (token_dict in txt format)
         '''
-    def build(self, embedding_size = 128, is_bidirectional = False, depth = 3, cell = 'GRU', 
+    def build_rnn(self, embedding_size = 128, is_bidirectional = False, depth = 3, cell = 'GRU', 
                 cell_size = 128, dense_size = 20, dr = 0.4):
         '''
         << summary >>
@@ -130,6 +130,16 @@ class nlp_model(nlp_base):
             self.wkdir+'/output/model.h5': the model file
         [var]:
             model: the keras model object
+        '''
+    def build_cnn(self, embedding_size = 128, n_gram = [2,3,4], filters = 32, dr = 0.5):
+        '''
+        < summary >
+        build n-gram CNN model
+        < inputs >>
+        embedding_size: size of the embedding layer
+        n_gram: n to be used in the n_gram model, suggest:[2,3,4] or [2,3,4,5]
+        filters: number of kenerals in each conventional layer
+        dr: dropout rate   
         '''
     def train(self, optimizer = 'RMSprop', lr = 0.001, batch_size = 128, epochs = 10, validation_split = 0.1, verbose = 1):
         '''

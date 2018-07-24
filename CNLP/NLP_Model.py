@@ -193,6 +193,15 @@ class nlp_model(nlp_base):
         return model
 
     def build_cnn(self, embedding_size = 128, n_gram = [2,3,4], filters = 32, dr = 0.5):
+        '''
+        < summary >
+        build n-gram CNN model
+        < inputs >>
+        embedding_size: size of the embedding layer
+        n_gram: n to be used in the n_gram model, suggest:[2,3,4] or [2,3,4,5]
+        filters: number of kenerals in each conventional layer
+        dr: dropout rate   
+        '''
         print('\n\n>>>>>>>>>> build CNN model <<<<<<<<<<')
         # load token_dict_size and padding_size
         token_dict_size, padding_size = \
