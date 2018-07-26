@@ -32,6 +32,18 @@ class nlp_base:
         is_remove_special: whether to remove special chacters, True / False
         remove_list: additional characters to be removed ['我', 'wow']
         '''
+        def full2half(s):  # full type number to half type number
+            n = [] 
+            for char in s: 
+                num = ord(char) 
+                if num == 0x3000: 
+                    num = 32 
+                elif 0xFF01 <= num <= 0xFF5E: 
+                    num -= 0xfee0 
+                num = chr(num) 
+                n.append(num) 
+            return ''.join(n) 
+
         print('\n===== text cleaning =====')
         text_remove = []
         if is_remove_special:
@@ -40,7 +52,8 @@ class nlp_base:
         text_remove += list(remove_list)
         for n in tqdm(range(len(data))):
             for _ in text_remove:
-                data[n] = re.sub(_,'', data[n])    
+                data[n] = full2half(re.sub(_,'', data[n]))
+
         return data
 
     def load_data(self, read_csv, sep='@', txt_col = 0, label_col = 1, rm_short = 0, 

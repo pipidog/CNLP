@@ -62,7 +62,7 @@ class nlp_stat(nlp_base):
 
         return token_freq
 
-    def vis_stat(self, n_show = 60, ex_words = (), lang = 'tc'):
+    def vis_stat(self, n_show = 60, ex_words = (), lang = 'tc', is_show = True):
         '''
         << summary >>
         visualize high frequency words
@@ -101,16 +101,18 @@ class nlp_stat(nlp_base):
 
         # build keys and values 
         keys = []; val = []
+        print('  >> top-500 words (with exclusions)')
         for n in range(500):
             if (top_list[n][0] not in ex_words):
                 keys += [top_list[n][0]+'   '] # add space to prevent wrong display
                 val += [top_list[n][1]]
-
+                print('    rank-%d: %s (%d)' % (n, keys[-1], val[-1]))
         # visuzlize frequency statiscs 
         sns.set(style="whitegrid")
-        f, ax = plt.subplots(figsize=(6,8.5))
+        f, ax = plt.subplots(figsize=(8,8.5))
         sns.barplot(x=val[:n_show], y=keys[:n_show])
         ax.set_yticklabels(keys, fontproperties=myfont) 
         plt.title('word frequency')
         plt.savefig(self.wkdir+'output/stat_freq.png')
-        plt.show()
+        if is_show:
+            plt.show()
