@@ -89,3 +89,6 @@ n-gram CNN是最年來開始興起的NLP文本分類方法，最早是2014年由
 	 <p align="center">
 	  <img src="./img/pred_usage.png">
 	 </p>
+
+## 如何使用自訂的深度學習模型
+如果預設的深度學習模型不符合需求，使用者可以跳過model.build_cnn或是model.build_rnn，改使用Keras定義自己的深度學習模型。定義好之後,只要使用Keras將模型存檔為work_dir/output/model.h5即可，之後的model.train以及model.test方法會自行讀取該檔。
